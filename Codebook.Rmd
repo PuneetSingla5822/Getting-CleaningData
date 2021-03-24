@@ -1,0 +1,64 @@
+---
+title: "Codebook"
+author: "Puneet Singla"
+date: "3/21/2021"
+output: md_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+source("run_analysis.R")
+output <- run_analysis()
+```
+
+## Author: Puneet Singla
+**This codebook.md is generated from Codebook.Rmd**
+
+## This submission includes following R scripts
+### 1. run_analysis.R
+
+The purpose of this R script is to consolidate Test & Training datasets. Following variables & transformations are involved
+
++ fldrnm_test: Folder location of test files
++ fldrnm_train: Folder location of training files
++ flnm_test: List of all test files
++ flnm_train: List of all training files
++ obj_all: List of all R objects to store consolidated Test & Training data
++ subject: Subject id for each observation
++ ftre_lbl: Variable names for each of the feature vector
++ actv_lbl: Activity labels
++ y_actv_lbl: Each observation with their activity labels
++ X: Matrix of all observations with their feature vectors
++ X_mean_std: Subset of X. Feature variables limited to Mean and Standard Deviation
++ X_mean_std_grp_by: X_mean_std variables converted to data frame with declared group by at Subject & Activity level
++ X_avg_mean_std: Tidy dataset with average of all variables in X_mean_std aggregated at Subject & Activity level
+
+## Data Outputs
+
+1.tidy_dataset.txt: A tidy data set representing average of Mean & Standard deviation features of each variable for each activity and each subject. This file is created from variable - X_avg_mean_std
+
+### Data Dictionary: tidy_dataset
+
+sbj_id: Identifies the subject who performed the activity for each window sample.
+
+Unique Values:
+
+```{r echo=FALSE}
+unique(output$sbj_id)
+```
+
+actv_nm: Activity name
+
+Unique Values:
+
+```{r echo=FALSE}
+unique(output$actv_nm)
+```
+
+Metrics:
+
+```{r echo=FALSE}
+for(i in 3:dim(output)[2]) {
+  print(paste0(names(output)[i],":",round(min(output[,i]),3)," - ",round(max(output[,i]),3)))
+}
+```
