@@ -51,7 +51,7 @@ run_analysis <- function() {
   X <- cbind(subject,y_actv_lbl,X)
   
   ## Subset X to contain only Mean & Standard deviation metrics
-  X_mean_std <- select(X, sbj_id, actv_nm, contains(c("mean()","std()")))
+  X_mean_std <- select(X, sbj_id, actv_nm, contains(c("mean","std"), ignore.case = TRUE))
   
   ## Independent tidy dataset with average of each variable for each activity and each subject 
   X_mean_std_grp_by <- tbl_df(X_mean_std) %>% group_by(sbj_id, actv_nm)
@@ -61,6 +61,6 @@ run_analysis <- function() {
   for(i in 3:dim(X_avg_mean_std)[2]) {names(X_avg_mean_std)[i] <- paste0("avg_",names(X_avg_mean_std)[i])}
   
   ## Write the tidy dataset to a file
-  write.table(X_avg_mean_std, "tidy_dataset.txt",row.names = FALSE)
+  write.table(X_avg_mean_std, "tidy_dataset.txt",row.names = FALSE, append = FALSE)
   X_avg_mean_std
 }
