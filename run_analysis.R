@@ -14,6 +14,7 @@ run_analysis <- function() {
   ## Load dplyr and tidyr libraries
   library(dplyr)
   library(tidyr)
+  library(plyr)
   
   ## Declare location of test & training files
   fldrnm_test <- c("UCI_HAR_Dataset/test")
@@ -28,8 +29,8 @@ run_analysis <- function() {
   
   ## Read test & train files in sequence and combine them
   for(i in 1:length(flnm_test)) {
-    tmp_test <- read.table(paste0(fldrnm_test,"/",flnm_test[i]))
-    tmp_train <- read.table(paste0(fldrnm_train,"/",flnm_train[i]))
+    tmp_test <- read.table(paste0(fldrnm_test,"/",flnm_test[i]), stringsAsFactors = FALSE)
+    tmp_train <- read.table(paste0(fldrnm_train,"/",flnm_train[i]), stringsAsFactors = FALSE)
     assign(obj_all[i], rbind(tmp_test,tmp_train))
     rm("tmp_test")
     rm("tmp_train")
@@ -39,12 +40,12 @@ run_analysis <- function() {
   names(subject) <- c("sbj_id")
   
   ## Read features labels and assign names to features dataset
-  ftre_lbl <- read.table("UCI_HAR_Dataset/features.txt")
+  ftre_lbl <- read.table("UCI_HAR_Dataset/features.txt", stringsAsFactors = FALSE)
   names(X) <- ftre_lbl[,2]
   
   ## Read activity labels and merge with the activity ids. Assign labels to the dataset
-  actv_lbl <- read.table("UCI_HAR_Dataset/activity_labels.txt")
-  y_actv_lbl <- merge(y,actv_lbl,by.x = "V1", by.y = "V1")
+  actv_lbl <- read.table("UCI_HAR_Dataset/activity_labels.txt", stringsAsFactors = FALSE)
+  y_actv_lbl <- join(y,actv_lbl)
   names(y_actv_lbl) <- c("actv_id","actv_nm")
   
   ## Overwrite X to include Subject ID and activity labels
